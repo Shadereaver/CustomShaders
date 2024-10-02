@@ -47,13 +47,12 @@ FCustomViewExtension::FCustomViewExtension(const FAutoRegister& AutoRegister, FL
 void FCustomViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View,
 	const FPostProcessingInputs& Inputs)
 {
-	if ((*Inputs.SceneTextures)->CustomDepthTexture->Desc.Format ==! PF_DepthStencil) return;
+	if ((*Inputs.SceneTextures)->CustomDepthTexture->Desc.Format != PF_DepthStencil) return;
 
 	checkSlow(View.bIsViewInfo);
 	const FIntRect Viewport = static_cast<const FViewInfo&>(View).ViewRect;
 	FScreenPassTexture SceneColour((*Inputs.SceneTextures)->SceneColorTexture, Viewport);
 	FGlobalShaderMap* GlobalShaderMap = GetGlobalShaderMap(GMaxRHIFeatureLevel);
-
 	RDG_EVENT_SCOPE(GraphBuilder, "Custom Render Pass");
 
 	const FScreenPassTextureViewport SceneColourTextureViewport(SceneColour);
@@ -87,7 +86,7 @@ void FCustomViewExtension::PrePostProcessPass_RenderThread(FRDGBuilder& GraphBui
 	CombineParameters->SceneColour = SceneColourCopyRenderTarget.Texture;
 	CombineParameters->InputTexture = UVMaskRenderTarget.Texture;
 	CombineParameters->InputSampler = TStaticSamplerState<SF_Point, AM_Clamp, AM_Clamp, AM_Clamp>::GetRHI();
-	CombineParameters->Colour = HighlightColour;
+	CombineParameters->Velocity = (*Inputs.SceneTextures)->GBufferVelocityTexture;
 	CombineParameters->ViewParams = SceneTextureViewportParams;
 	CombineParameters->RenderTargets[0] = FRenderTargetBinding(SceneColour.Texture, ERenderTargetLoadAction::ELoad);
 

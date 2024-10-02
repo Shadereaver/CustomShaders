@@ -21,7 +21,7 @@ public:
 };
 
 BEGIN_SHADER_PARAMETER_STRUCT(FCombineShaderParameters, )
-	SHADER_PARAMETER(FLinearColor, Colour)
+	SHADER_PARAMETER_RDG_TEXTURE(Texture2D, Velocity)
 	SHADER_PARAMETER_RDG_TEXTURE(Texture2D, SceneColour)
 	SHADER_PARAMETER_RDG_TEXTURE(Texture2D, InputTexture)
 	SHADER_PARAMETER_SAMPLER(SamplerState, InputSampler)
