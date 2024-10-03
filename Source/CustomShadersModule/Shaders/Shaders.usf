@@ -43,7 +43,8 @@ float4 CombineMainPS(float4 SvPosition : SV_POSITION) : SV_Target0
 
 	if (length(samp.xyz) > 0)
 	{
-		return Texture2DSample(SceneColour, InputSampler, UV) * Texture2DSample(Velocity, InputSampler, UV);
+		
+		return Texture2DSample(SceneColour, InputSampler, UV);
 	}
 	return Texture2DSample(SceneColour, InputSampler, UV);
 }
